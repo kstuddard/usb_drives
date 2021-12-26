@@ -1,3 +1,8 @@
 #!/bin/bash
 
-parted /dev/sdc mklabel msdos
+arr=( "$@" )
+
+for x in "${arr[@]}" ;
+do
+  echo $x
+done

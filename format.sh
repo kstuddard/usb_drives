@@ -6,13 +6,17 @@ echo "Please run this script with sudo:"
   exit 1
 fi
 
-devices=(/dev/sdc /dev/sdd /dev/sde /dev/sdf /dev/sdg /dev/sdh)
+devices=( "$@" )
 
 for dev in "${devices[@]}" ;
 do
-  parted -s "$dev" mklabel msdos
-  parted -s "$dev" mkpart primary ntfs 0% 100%
-  part="$dev"1
-  sleep 1 
-  mkfs.ntfs -fC $part
+  if [ -b $dev ]; then  
+    parted -s "$dev" mklabel msdos
+    parted -s "$dev" mkpart primary ntfs 0% 100%
+    part="$dev"1
+    sleep 1 
+    mkfs.ntfs -fC $part
+  else
+    echo "'$dev' is not a block device!"
+  fi
 done
